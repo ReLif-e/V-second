@@ -14,7 +14,6 @@ export function isExternal(path) {
  * @param {string} str
  * @returns {Boolean}
  */
-export function validUsername(str) {
-  const valid_map = ['admin', 'editor']
-  return valid_map.indexOf(str.trim()) >= 0
+export function validmobile(str) {
+  return /^1[3-9]\d{9}$/.test(str)// 正则表达式，手机号验证的正则封装到这里
 }
