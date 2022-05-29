@@ -57,7 +57,7 @@
 <script>
 import { validmobile } from '@/utils/validate'
 // 导入发请求的方法
-import { getInfo, login } from '@/api/user'
+import { login } from '@/api/user'
 export default {
   name: 'Login',
   data() {
@@ -129,15 +129,18 @@ export default {
         console.log(res.data)
         // 调用User里面的方法并把获取的Token传进去，让Vuex里面的Token=我传递过去的Token
         this.$store.commit('user/setToken', res.data)
+
+        // 跳转到首页
+        this.$router.push('/')
       } catch (err) {
         // console.log(err)
         this.$message.error(err.message)
       }
-    },
-    async dleLogin() { // 测试获取用户信息
-      const { data: res } = await getInfo()
-      console.log(res)
     }
+    // async dleLogin() { // 测试获取用户信息
+    //   const { data: res } = await getInfo()
+    //   // console.log(res)
+    // }
   }
 }
 </script>

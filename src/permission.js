@@ -1,3 +1,37 @@
+import router from '@/router'
+import store from '@/store'
+
+// 进度条导入
+import NProgress from 'nprogress' // progress bar
+import 'nprogress/nprogress.css' // progress bar style
+
+// to到哪去
+// from从哪来
+// next放行
+
+// 创建一个白名单
+const witchList = ['/login', '/404']
+// 路由前置守卫
+router.beforeEach((to, from, next) => {
+  NProgress.start()
+  const token = store.state.user.token
+  // console.log(to, from)
+  if (token) {
+    store.dispatch('user/GetUserInfo')
+    if (to.path === '/login') { // 是不是去登入页面不是就返回登入页面，是就放行
+      next('/')
+    } else {
+      next()
+    }
+  } else {
+    if (witchList.includes(to.path)) {
+      next()
+    } else {
+      next('/login')
+    }
+  }
+  NProgress.done()
+})
 // import router from './router'
 // import store from './store'
 // import { Message } from 'element-ui'

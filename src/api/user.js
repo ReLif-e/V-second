@@ -14,6 +14,7 @@ export function getInfo(token) {
     method: 'post'
   })
 }
+// 因为设置头像是通过第一次请求的id来获取的，所以要获取两次数据
 
 export function logout() {
 
