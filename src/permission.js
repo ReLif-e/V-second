@@ -4,7 +4,7 @@ import store from '@/store'
 // 进度条导入
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-
+import getpagetitle from '@/utils/get-page-title'
 // to到哪去
 // from从哪来
 // next放行
@@ -15,12 +15,18 @@ const witchList = ['/login', '/404']
 router.beforeEach((to, from, next) => {
   NProgress.start()
   const token = store.state.user.token
+
+  document.title = getpagetitle(to.meta.title)// 把项目标题该文对应组件的名字
+  console.log(document.title)
+
   // console.log(to, from)
   if (token) {
-    store.dispatch('user/GetUserInfo')
     if (to.path === '/login') { // 是不是去登入页面不是就返回登入页面，是就放行
       next('/')
     } else {
+      if (!store.getters.userid) { // 如果没有数据里面的id那么就发送请求，避免多次请求用户信息
+        store.dispatch('user/GetUserInfo')
+      }
       next()
     }
   } else {

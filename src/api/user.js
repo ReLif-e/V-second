@@ -15,7 +15,12 @@ export function getInfo(token) {
   })
 }
 // 因为设置头像是通过第一次请求的id来获取的，所以要获取两次数据
-
+export function heard(id) {
+  return request({
+    url: '/sys/user/' + id,
+    method: 'get'
+  })
+}
 export function logout() {
 
 }

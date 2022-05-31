@@ -131,7 +131,7 @@ export default {
         this.$store.commit('user/setToken', res.data)
 
         // 跳转到首页
-        this.$router.push('/')
+        this.$router.push(this.$route.query.return_url || '/')
       } catch (err) {
         // console.log(err)
         this.$message.error(err.message)

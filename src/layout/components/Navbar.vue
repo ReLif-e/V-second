@@ -10,7 +10,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="@/assets/common/bigUserHeader.png" class="user-avatar">
+          <img :src="staffPhoto" class="user-avatar">
           <span>{{ username }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
@@ -43,17 +43,32 @@ export default {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'username' // 封装了一个地址，方便以后只写axios接受数据的值  //store/getters.js
+      'username', // 封装了一个地址，方便以后只写axios接受数据的值  //store/getters.js
+      'staffPhoto'
     ])
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
-    async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    async  logout() {
+      this.$confirm('确定要退出吗？', '提示', { type: 'error' })
+        .then(() => {
+          this.$store.dispatch('user/removeToken')
+          this.$router.push({
+            path: '/login',
+            query: {
+              return_url: this.$route.fullPath
+            }
+          })
+          this.$message.success('退出成功')
+          // this.$router.push('/login')
+        })
+        .catch(() => {
+          console.log(1111)
+        })
     }
+
   }
 }
 </script>
