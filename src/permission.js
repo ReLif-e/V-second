@@ -17,7 +17,7 @@ router.beforeEach((to, from, next) => {
   const token = store.state.user.token
 
   document.title = getpagetitle(to.meta.title)// 把项目标题该文对应组件的名字
-  console.log(document.title)
+  // console.log(document.title)
 
   // console.log(to, from)
   if (token) {

@@ -29,9 +29,9 @@ export default {
   actions: {
     async GetUserInfo(context) {
       const res = await getInfo()
-      console.log(res)
+      // console.log(res)
       const res1 = await heard(res.data.userId)// 第二次发请求，传递的是第一次请求返回数据体里面的id
-      console.log(res1)
+      // console.log(res1)
       context.commit('PostInfo', { ...res.data, ...res1.data })// 把两次请求存储到一起
     },
     /**
