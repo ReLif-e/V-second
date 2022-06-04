@@ -19,7 +19,8 @@
               <el-table-column label="角色名称" width="240" prop="name" />
               <el-table-column label="描述" prop="description" />
               <el-table-column label="操作">
-                <template slot-scope="scope">
+                <!-- <template slot-scope="scope"> -->
+                <template>
                   <el-button size="small" type="success">分配权限</el-button>
                   <el-button size="small" type="primary">编辑</el-button>
                   <el-button size="small" type="danger">删除</el-button>
