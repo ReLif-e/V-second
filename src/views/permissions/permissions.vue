@@ -66,7 +66,7 @@
       :close-on-press-escape="false"
     >
       <!-- 自定义事件是@开头 -->
-      <de-Dialog v-if="dialogVisible" :id="id" :isedit="isEdit" @success="success" />
+      <de-Dialog v-if="dialogVisible" :id="id" :isedit="isEdit" :orgin-list="orginList" @success="success" />
     </el-dialog>
 
     <!-- 编辑部门 -->
@@ -78,7 +78,7 @@
       :close-on-press-escape="false"
     >
       <!-- 自定义事件是@开头 -->
-      <de-Dialog v-if="dialogVisibleChange" :id="id" :isedit="isEdit" @success="success" />
+      <de-Dialog v-if="dialogVisibleChange" :id="id" :isedit="isEdit" :orgin-list="orginList" @success="success" />
     </el-dialog>
   </div>
 </template>
@@ -98,7 +98,8 @@ export default {
       id: '',
       dialogVisible: false,
       dialogVisibleChange: false,
-      isEdit: false
+      isEdit: false,
+      orginList: []
     }
   },
   created() {
@@ -113,6 +114,9 @@ export default {
         res.data.depts.shift()
         this.list = tranListToTreeData(res.data.depts)
         // console.log(this.list) // 打印获取的部门信息
+
+        // 定义一个空数组把需要的数据传入空数组里面
+        this.orginList = res.data.depts.map(({ id, pid, code, name }) => { return { id, pid, name, code } })
       } catch (err) {
         console.dir(err)
       }
