@@ -184,6 +184,7 @@ export default {
 
       const res = await PutEmploy(this.roleForm)
       console.log(res)
+      console.log(res)
     }
   }
 }
