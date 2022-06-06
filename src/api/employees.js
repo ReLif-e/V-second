@@ -22,3 +22,37 @@ export function GetEmploy(params) {
   })
 }
 
+/**
+ *
+ * 根据id删除角色
+ */
+export function DelEmploy(id) {
+  return request({
+    method: 'delete',
+    url: '/sys/role/' + id
+  })
+}
+
+/**
+ *
+ * 添加角色信息
+ */
+export function AddEmploy(data) {
+  return request({
+    method: 'post',
+    url: '/sys/role',
+    data
+  })
+}
+
+/**
+ *
+ * 编辑角色信息
+ */
+export function PutEmploy(data) {
+  return request({
+    method: 'put',
+    url: '/sys/role/' + data.id,
+    data
+  })
+}
