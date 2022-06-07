@@ -56,3 +56,38 @@ export function PutEmploy(data) {
     data
   })
 }
+
+/**
+ *
+ * 表单获取角色信息
+ */
+export function Getuser(params) {
+  return request({
+    method: 'get',
+    url: 'sys/user',
+    params
+  })
+}
+
+/**
+ *
+ * 表单删除角色、
+ */
+export function Subuser(id) {
+  return request({
+    method: 'delete',
+    url: '/sys/user/' + id
+  })
+}
+
+/**
+ *
+ * 表单增加角色
+ */
+export function Postuser(data) {
+  return request({
+    method: 'post',
+    url: '/sys/user/',
+    data
+  })
+}

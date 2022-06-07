@@ -16,6 +16,9 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+// 注册全局的组件
+import MYUI from '@/components'
+Vue.use(MYUI)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

@@ -47,10 +47,12 @@
     </div>
     <!-- 新增弹框 -->
     <el-dialog
+      v-if="showDialog"
       :title="isEdit ? '编辑' :'新增'"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       :visible.sync="showDialog"
+      @close="Close"
     >
       <el-form ref="roleForm" :model="roleForm" :rules="rules" label-width="100px">
         <el-form-item label="角色名称" prop="name">
@@ -71,6 +73,7 @@
   </div>
 </template>
 <script>
+// import { AddEmploy, DelEmploy, GetEmploy, PutEmploy } from '@/api/employees'
 import { AddEmploy, DelEmploy, GetEmploy, PutEmploy } from '@/api/employees'
 export default {
   data() {
@@ -98,12 +101,14 @@ export default {
     this.EmployeesList()
   },
   methods: {
+    // 获取请求获取数据
     async  EmployeesList() {
       const res = await GetEmploy(this.q)
       // console.log(res)
       this.List = res.data.rows // 保存的是返回数据里面的数据
       this.total = res.data.total
     },
+
     // 切换分页点击后改变q里面的数据，并重新渲染
     handleSizeChange(pagesize) {
       this.q.pagesize = pagesize
@@ -113,6 +118,7 @@ export default {
       this.q.page = page
       this.EmployeesList()
     },
+
     // 删除按钮
     remove(id) {
       // console.log(id)
@@ -136,56 +142,82 @@ export default {
           this.$message.error(e.message)
         })
     },
-    // 点击新增角色按钮
+
+    // 弹框内部的确认按钮
+    async  hSubmit() {
+      // 兜底校验
+      const valid = await this.$refs.roleForm.validate().catch(e => e)
+      // 乘早返回
+      if (!valid) return
+
+      // 通过条件来判断 用哪个函数去发请求
+      this.isEdit ? this.sub() : this.add()
+    },
+
+    // 编辑确定按钮
+    async sub() {
+      // 发送更新请求
+      const res = await PutEmploy(this.roleForm)
+      console.log(res)
+
+      // 关闭页面
+      this.showDialog = false
+
+      // 重新渲染
+      this.EmployeesList()
+    },
+
+    // 添加确定按钮
+    async add() {
+      const res = await AddEmploy(this.roleForm)
+      console.log(res)
+
+      // 添加成功后关闭弹框
+      this.showDialog = false
+      // 提醒用户
+      this.$message.success(res.message)
+      // 如果总条数  余  当前页面条数  等于0    那么就让总条数加一
+      if (this.total % this.q.pagesize === 0) {
+        this.total++
+      }
+
+      // 跳转到对最后
+      this.q.page = Math.ceil(this.total / this.q.pagesize)
+
+      // 重新渲染
+      this.EmployeesList()
+    },
+
+    // 让弹框显示的添加角色按钮
     AddPepple() {
-      // 弹框出现
+      // 弹框显示
       this.showDialog = true
 
       // 改变状态
       this.isEdit = false
     },
 
-    // 弹框内部点击到了确定按钮
-    async hSubmit() {
-      // 兜底校验
-      const valid = this.$refs.roleForm.validate((e) => e)
-      if (!valid) return
-
-      // 发送增加角色的请求
-      const res = await AddEmploy(this.roleForm)
-      console.log(res)
-
-      // 关闭弹窗
-      this.showDialog = false
-
-      // 根据结果提醒用户
-      this.$message.success(res.message)
-
-      // 添加角色后，让当前显示的页面跳转到最后一页
-      // if (this.total % this.q.pagesize === 0) {
-      //   this.total++
-      // }
-      this.q.page = Math.ceil(this.total / this.q.pagesize)
-      // 重新渲染
-      this.EmployeesList()
-    },
-
-    // 编辑的确定按钮
-    async Edit(row) {
-      console.log(row)
-      // 让弹框显示
+    // 让编辑弹框出现的按钮
+    Edit(row) {
+      // 弹框显示
       this.showDialog = true
-
-      // 数据回填
-      this.roleForm = row
 
       // 改变状态
       this.isEdit = true
 
-      const res = await PutEmploy(this.roleForm)
-      console.log(res)
-      console.log(res)
+      // 数据回填
+      this.roleForm = { ...row }
+    },
+
+    // 设置一个关闭事件,在关闭同时  把表单清空  并  移除校验规则
+    Close() {
+      this.roleForm = { // 用户输入的数据，增加时一起带过去
+        name: '',
+        description: ''
+      }
+      this.$refs.roleForm.clearValidate()
     }
+
   }
 }
 </script>
