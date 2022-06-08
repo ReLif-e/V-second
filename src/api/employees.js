@@ -91,3 +91,26 @@ export function Postuser(data) {
     data
   })
 }
+
+/**
+ *
+ * 获取角色详情
+ */
+export function getuserDetailById(id) {
+  return request({
+    method: 'get',
+    url: '/sys/user/' + id
+  })
+}
+
+/**
+ *
+ * 保存员工信息详情
+ */
+export function PutguserDetailById(data) {
+  return request({
+    method: 'put',
+    url: '/sys/user/' + data.id,
+    data
+  })
+}
