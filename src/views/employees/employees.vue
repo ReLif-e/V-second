@@ -74,10 +74,9 @@
         :id="curyId"
         ref="fromId"
         @success="dialogVisible=false"
-        @close="Close"
+        @closeD="Close"
       />
     </el-dialog>
-
   </div>
 </template>
 
@@ -85,7 +84,7 @@
 import dayjs from 'dayjs'
 import { Getuser, Subuser } from '@/api/employees'
 import AssignRole from './assignRole.vue'
-
+// 213123
 // 导入点击显示的弹框
 import EmployessDialog from './EmployeesDialog.vue'
 export default {
