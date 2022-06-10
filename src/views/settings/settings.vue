@@ -136,7 +136,7 @@ export default {
           this.EmployeesList()
         })
         .catch((e) => {
-          console.log(e)
+          // console.log(e)
           if (e === 'cancel') return
 
           this.$message.error(e.message)

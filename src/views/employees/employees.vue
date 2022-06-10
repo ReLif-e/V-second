@@ -37,7 +37,7 @@
           <el-table-column label="操作">
             <template v-slot="{row}">
               <el-button type="text" size="small" @click="$router.push('./employees/detail/' + row.id)">查看</el-button>
-              <el-button type="text" size="small">分配角色</el-button>
+              <el-button type="text" size="small" @click="hroute(row.id)">分配角色</el-button>
               <el-button type="text" size="small" @click="Sub(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -66,6 +66,17 @@
         />
       </el-dialog>
     </div>
+    <el-dialog
+      title="分配角色"
+      :visible.sync="dialogVisible"
+    >
+      <AssignRole
+        :id="curyId"
+        ref="fromId"
+        @success="dialogVisible=false"
+        @close="Close"
+      />
+    </el-dialog>
 
   </div>
 </template>
@@ -73,15 +84,19 @@
 <script>
 import dayjs from 'dayjs'
 import { Getuser, Subuser } from '@/api/employees'
+import AssignRole from './assignRole.vue'
 
 // 导入点击显示的弹框
 import EmployessDialog from './EmployeesDialog.vue'
 export default {
   components: {
-    EmployessDialog
+    EmployessDialog,
+    AssignRole
   },
   data() {
     return {
+      curyId: '',
+      dialogVisible: false,
       list: [],
       q: {
         page: 1,
@@ -95,6 +110,9 @@ export default {
     this.GetList() // 渲染页面
   },
   methods: {
+    Close() {
+      this.$refs.fromId.Close.close()
+    },
     Success() {
       // console.log(1)
       // 关闭弹框
@@ -168,6 +186,13 @@ export default {
     // 添加角色
     AddPeople() {
       this.ShowDialog = true
+    },
+
+    // 分配权限
+    async hroute(id) {
+      this.dialogVisible = true
+
+      this.curyId = id
     }
   }
 }

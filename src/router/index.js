@@ -34,13 +34,14 @@ import approvals from './modules/approvals'
 import permissions from './modules/permissions'
 export const constRouter = [
   departments,
-  permissions,
   settings,
   employees,
+  permissions,
+
+  approvals,
   salarys,
   social_securitys,
-  attendances,
-  approvals
+  attendances
 ]
 /**
  * constantRoutes

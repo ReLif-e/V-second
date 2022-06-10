@@ -17,9 +17,15 @@
       :before-upload="beforeAvatarUpload"
       :http-request="upload"
     >
+      <!-- 如果有进度条并且进度条还没跑完那么   进度条就会显示 -->
       <el-progress v-if="percent && percent < 100 " type="circle" :percentage="percent" />
-      <img v-if="value" :src="value" class="avatar">
-      <i v-show="value" v-else class="el-icon-plus avatar-uploader-icon" />
+
+      <!-- 如果点击的人信息里面有图片  并且  进度条已经跑完了，那么着图片就会显示 -->
+      <img v-if="value && percent === 0" :src="value" class="avatar">
+      <!-- ===0 是因为怕没上传图片,用之前上传的图片👆 -->
+
+      <!-- 默认显示的加号图片，如果图片或进度条跑完了那么就隐藏 -->
+      <i v-show="!percent" v-else class="el-icon-plus avatar-uploader-icon" />
     </el-upload>
   </div>
 </template>
