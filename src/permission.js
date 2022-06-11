@@ -1,4 +1,4 @@
-import router from '@/router'
+import router, { constRouter } from '@/router'
 import store from '@/store'
 
 // 进度条导入
@@ -12,7 +12,7 @@ import getpagetitle from '@/utils/get-page-title'
 // 创建一个白名单
 const witchList = ['/login', '/404']
 // 路由前置守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   NProgress.start()
   const token = store.state.user.token
 
@@ -25,7 +25,27 @@ router.beforeEach((to, from, next) => {
       next('/')
     } else {
       if (!store.getters.userid) { // 如果没有数据里面的id那么就发送请求，避免多次请求用户信息
-        store.dispatch('user/GetUserInfo')
+        // 获取用户信息里面的权限信息
+        const res = await store.dispatch('user/GetUserInfo')
+        const menus = res.roles.menus
+
+        // 用户的权限信和路由对比，权限信息相同的就放行
+        const filterRoutes = constRouter.filter(item => menus.includes(item.children[0].name))
+
+        // 动态添加路由，会优先404页面，这里把404放进动态路由的最后面
+        filterRoutes.push({ path: '*', redirect: '/404', hidden: true })
+
+        // 动态添加路由
+        router.addRoutes(filterRoutes)
+        store.commit('menu/SetMenuList', constRouter)
+
+        // 调用方法
+        next({
+          ...to, // next({ ...to })的目的,是保证路由添加完了再进入页面 (可以理解为重进一次)
+          replace: true // 重进一次, 不保留重复历史
+        })
+      } else {
+        next()
       }
       next()
     }

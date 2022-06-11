@@ -67,6 +67,7 @@
       </el-dialog>
     </div>
     <el-dialog
+      v-if="dialogVisible"
       title="分配角色"
       :visible.sync="dialogVisible"
     >

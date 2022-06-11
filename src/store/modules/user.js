@@ -33,6 +33,7 @@ export default {
       const res1 = await heard(res.data.userId)// 第二次发请求，传递的是第一次请求返回数据体里面的id
       // console.log(res1)
       context.commit('PostInfo', { ...res.data, ...res1.data })// 把两次请求存储到一起
+      return { ...res.data, ...res1.data }
     },
     /**
      * 实现退出功能

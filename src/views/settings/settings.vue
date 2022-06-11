@@ -22,7 +22,7 @@
               <el-table-column label="操作">
                 <!-- <template slot-scope="scope"> -->
                 <template v-slot="{row}">
-                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button size="small" type="success" @click="hAdd(row.id)">分配权限</el-button>
                   <el-button size="small" type="primary" @click="Edit(row)">编辑</el-button>
                   <el-button size="small" type="danger" @click="remove(row.id)">删除</el-button>
                 </template>
@@ -70,14 +70,29 @@
         </el-col>
       </el-row>
     </el-dialog>
+
+    <!-- 弹框页面 -->
+    <el-dialog
+      v-if="showDialogAssig"
+      title="分配权限"
+      :visible.sync="showDialogAssig"
+    >
+      <AssignOrgin :id="turyId" @close="closed" />
+    </el-dialog>
   </div>
 </template>
 <script>
 // import { AddEmploy, DelEmploy, GetEmploy, PutEmploy } from '@/api/employees'
 import { AddEmploy, DelEmploy, GetEmploy, PutEmploy } from '@/api/employees'
+import AssignOrgin from './assignOrgin.vue'
 export default {
+  components: {
+    AssignOrgin
+  },
   data() {
     return {
+      turyId: '',
+      showDialogAssig: false,
       isEdit: false,
       List: [], // 渲染的数据
       q: { // 带过去要渲染多少数据的参数
@@ -101,6 +116,9 @@ export default {
     this.EmployeesList()
   },
   methods: {
+    closed() {
+      this.showDialogAssig = false
+    },
     // 获取请求获取数据
     async  EmployeesList() {
       const res = await GetEmploy(this.q)
@@ -216,6 +234,12 @@ export default {
         description: ''
       }
       this.$refs.roleForm.clearValidate()
+    },
+    // 分配权限
+    hAdd(id) {
+      // console.log(id)
+      this.showDialogAssig = true
+      this.turyId = id
     }
 
   }
