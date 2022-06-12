@@ -11,9 +11,9 @@
 
         <!-- 右侧 -->
         <template #right>
-          <el-button type="primary">导出Excel</el-button>
-          <el-button type="success">导入Excel</el-button>
-          <el-button type="danger" @click="AddPeople">新增员工</el-button>
+          <el-button v-allow="'Del_Exlcel'" type="primary">导出Excel</el-button>
+          <el-button v-allow="'export_Exlcel'" type="success">导入Excel</el-button>
+          <el-button v-allow="'export_add'" type="danger" @click="AddPeople">新增员工</el-button>
         </template>
       </page-tools>
 

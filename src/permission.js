@@ -37,7 +37,7 @@ router.beforeEach(async(to, from, next) => {
 
         // 动态添加路由
         router.addRoutes(filterRoutes)
-        store.commit('menu/SetMenuList', constRouter)
+        store.commit('menu/SetMenuList', filterRoutes)
 
         // 调用方法
         next({

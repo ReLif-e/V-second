@@ -16,9 +16,26 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+Vue.directive('allow', {
+  inserted(el, binding) {
+    // poins = 获取用户信息里面的权限信息
+    const poins = store.state.user.UserInfo.roles.points
+    // console.log(el)
+    console.log(binding)
+    console.log(poins)
+
+    // 用户权限信息里面有没有自定义指令里面的值
+    if (!poins.includes(binding.value)) {
+      console.log('WUHJU')
+      // el.remove() // 删除上一个人的权限信息
+      // return true
+    }
+  }
+})
 // 注册全局的组件
 import MYUI from '@/components'
 Vue.use(MYUI)
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
