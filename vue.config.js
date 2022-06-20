@@ -14,7 +14,31 @@ const name = defaultSettings.title || 'vue Admin Template' // page title
 // You can change the port by the following methods:
 // port = 9528 npm run dev OR npm run dev --port = 9528
 const port = process.env.port || process.env.npm_config_port || 9528 // dev port
-
+let externals = {}
+let cdn = { css: [], js: [] }
+const isProduction = process.env.NODE_ENV === 'production' // 判断是否是生产环境
+if (isProduction) {
+  externals = {
+    /**
+      * externals 对象属性解析：
+      * '包名' : '在项目中引入的名字'
+    */
+    'vue': 'Vue',
+    'element-ui': 'ELEMENT',
+    'xlsx': 'XLSX'
+  }
+  cdn = {
+    css: [
+      'https://unpkg.com/element-ui/lib/theme-chalk/index.css' // element-ui css 样式表
+    ],
+    js: [
+      // vue must at first!
+      'https://unpkg.com/vue@2.6.12/dist/vue.js', // vuejs
+      'https://unpkg.com/element-ui/lib/index.js', // element-ui js
+      'https://cdn.jsdelivr.net/npm/xlsx@0.16.6/dist/xlsx.full.min.js' // xlsx
+    ]
+  }
+}
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
   /**
@@ -49,6 +73,7 @@ module.exports = {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
     name: name,
+    externals: externals,
     resolve: {
       alias: {
         '@': resolve('src')
@@ -66,7 +91,10 @@ module.exports = {
         include: 'initial'
       }
     ])
-
+    config.plugin('html').tap(args => {
+      args[0].cdn = cdn // 配置cdn给插件
+      return args
+    })
     // when there are many pages, it will cause too many meaningless requests
     config.plugins.delete('prefetch')
 
