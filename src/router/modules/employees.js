@@ -17,6 +17,14 @@ export default {
       meta: { title: '员工', icon: 'people' },
       hidden: true
 
+    },
+    {
+      path: 'import',
+      name: 'import',
+      component: () => import('@/views/employees/import.vue'),
+      meta: { title: '导入Excel', icon: 'people' },
+      hidden: true
+
     }
   ]
 

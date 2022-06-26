@@ -12,7 +12,7 @@
         <!-- 右侧 -->
         <template #right>
           <el-button v-allow="'Del_Exlcel'" type="primary">导出Excel</el-button>
-          <el-button v-allow="'export_Exlcel'" type="success">导入Excel</el-button>
+          <el-button v-allow="'export_Exlcel'" type="success" @click="$router.push('/employees/import')">导入Excel</el-button>
           <el-button v-allow="'export_add'" type="danger" @click="AddPeople">新增员工</el-button>
         </template>
       </page-tools>
