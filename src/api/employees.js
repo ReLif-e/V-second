@@ -17,7 +17,7 @@ export function GetEmployees() {
 export function GetEmploy(params) {
   return request({
     method: 'get',
-    url: '/sys/role',
+    url: '/sys/user',
     params
   })
 }
@@ -115,3 +115,15 @@ export function PutguserDetailById(data) {
   })
 }
 
+/**
+ *
+ * 批量导入员工接口
+ *
+ */
+export function importEmployee(data) {
+  return request({
+    method: 'post',
+    url: `/sys/user/batch`,
+    data
+  })
+}

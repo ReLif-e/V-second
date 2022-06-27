@@ -11,7 +11,7 @@
 
         <!-- 右侧 -->
         <template #right>
-          <el-button v-allow="'Del_Exlcel'" type="primary">导出Excel</el-button>
+          <el-button v-allow="'Del_Exlcel'" type="primary" @click="drive">导出Excel</el-button>
           <el-button v-allow="'export_Exlcel'" type="success" @click="$router.push('/employees/import')">导入Excel</el-button>
           <el-button v-allow="'export_add'" type="danger" @click="AddPeople">新增员工</el-button>
         </template>
@@ -27,7 +27,11 @@
             </template>
           </el-table-column>
           <el-table-column label="工号" prop="workNumber" />
-          <el-table-column label="聘用形式" prop="formOfEmployment" />
+          <el-table-column label="聘用形式" prop="formOfEmployment">
+            <template v-slot="{row}">
+              {{ forItem(row.formOfEmployment) }}
+            </template>
+          </el-table-column>
           <el-table-column label="部门" prop="departmentName" />
           <el-table-column label="入职时间" prop="timeOfEntry">
             <template v-slot="{row}">
@@ -82,13 +86,21 @@
 </template>
 
 <script>
+// 转换数据
+import employees from '@/constant/employees'
+
 import dayjs from 'dayjs'
-import { Getuser, Subuser } from '@/api/employees'
+import { GetEmploy, Getuser, Subuser } from '@/api/employees'
 import AssignRole from './assignRole.vue'
 // 213123
 // 导入点击显示的弹框1111111
 
 import EmployessDialog from './EmployeesDialog.vue'
+
+const hireType = {}
+employees.hireType.forEach(item => {
+  hireType[item.id] = item.value
+})
 export default {
   components: {
     EmployessDialog,
@@ -111,6 +123,10 @@ export default {
     this.GetList() // 渲染页面
   },
   methods: {
+    forItem(code) {
+      // console.log(code)
+      return hireType[code]
+    },
     Close() {
       this.$refs.fromId.Close.close()
     },
@@ -194,6 +210,92 @@ export default {
       this.dialogVisible = true
 
       this.curyId = id
+    },
+
+    // 导出
+    async drive() {
+      // 表单头--转换数据
+      const map = {
+        'id': '编号',
+        'password': '密码',
+        'mobile': '手机号',
+        'username': '姓名',
+        'timeOfEntry': '入职日期',
+        'formOfEmployment': '聘用形式',
+        'correctionTime': '转正日期',
+        'workNumber': '工号',
+        'departmentName': '部门',
+        'staffPhoto': '头像地址'
+      }
+      const { data: res } = await GetEmploy({ page: 1, size: this.total })
+      // console.log(res.rows)
+      const list = res.rows
+      console.log(list)
+
+      // 导出类似方法
+
+      // // 遍历数据替换数据
+      // const zhList = list.map(zhObj => {
+      //   // console.log(item)
+      //   // 创建一个空的来装数据
+      //   const enObj = {}
+
+      //   // 取出每个对象中的键 const zhObj =
+      //   const enkey = Object.keys(zhObj)
+      //   // console.log(enkey)
+
+      //   // 遍历循环映射关系将取出的键一一对应
+      //   enkey.forEach(enKeys => {
+      //     const zhKey = map[enKeys]
+      //     // console.log(zhKey)
+      //     // console.log(enKeys)
+
+      //     // 换数据
+      //     enObj[zhKey] = zhObj[enKeys]
+      //   })
+      //   return enObj
+      // })
+      // console.log(zhList)
+
+      // 获取第一条数据的内容
+      const first = list[0]
+      // console.log(first)
+
+      // 如果没有获取到第一条数据就返回
+      if (!first) return
+
+      // 通过第一条数据的键去映射关系里面找对应的
+      const header = Object.keys(first).map(item => map[item])
+      // console.log(header)
+
+      const data = list.map(item => {
+        // console.log(item)
+        // 返回的数据是1、2  通过循环去变成正式和非正式
+        const code = item['formOfEmployment']
+        item['formOfEmployment'] = hireType[code]
+
+        // 转换时间
+        const time = item['timeOfEntry']
+        item['timeOfEntry'] = this.formData(time)
+
+        const times = item['correctionTime']
+        item['correctionTime'] = this.formData(times)
+
+        // 返回中文的值作为数据
+        return Object.values(item)
+      })
+      // 导出功能
+      import('@/vendor/Export2Excel').then(excel => {
+        // excel表示导入的模块对象
+        console.log(excel)
+        excel.export_json_to_excel({
+          header, // 表头 必填
+          data, // 具体数据 必填
+          filename: 'excel-list', // 文件名称
+          autoWidth: true, // 宽度是否自适应
+          bookType: 'xlsx' // 生成的文件类型
+        })
+      })
     }
   }
 }

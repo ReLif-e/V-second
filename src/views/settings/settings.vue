@@ -83,8 +83,9 @@
 </template>
 <script>
 // import { AddEmploy, DelEmploy, GetEmploy, PutEmploy } from '@/api/employees'
-import { AddEmploy, DelEmploy, GetEmploy, PutEmploy } from '@/api/employees'
+import { AddEmploy, DelEmploy, PutEmploy } from '@/api/employees'
 import AssignOrgin from './assignOrgin.vue'
+import { GetemployeesId } from '@/api/roles'
 export default {
   components: {
     AssignOrgin
@@ -121,7 +122,7 @@ export default {
     },
     // 获取请求获取数据
     async  EmployeesList() {
-      const res = await GetEmploy(this.q)
+      const res = await GetemployeesId(this.q)
       // console.log(res)
       this.List = res.data.rows // 保存的是返回数据里面的数据
       this.total = res.data.total
