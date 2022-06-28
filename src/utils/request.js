@@ -76,7 +76,7 @@ export default service
 // // response interceptor
 // service.interceptors.response.use(
 //   /**
-//    * If you want to get http information such as headers or status
+//    * If you want to get http i1nformation such as headers or status
 //    * Please return  response => response
 //   */
 
