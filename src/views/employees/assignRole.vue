@@ -10,7 +10,7 @@
 
     <div style="margin-top: 20px; text-align: right">
       <el-button type="primary" @click="hSubmit">确定</el-button>
-      <el-button @click="closeDialog">取1消</el-button>
+      <el-button @click="closeDialog">取12消</el-button>
     </div>
   </div>
 </template>
