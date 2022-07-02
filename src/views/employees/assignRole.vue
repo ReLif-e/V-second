@@ -2,7 +2,7 @@
   <!-- // 分配角色 -->
   <div>
     <el-checkbox-group v-model="roleIds">
-      <!-- 注意：label决定当前选中的值 -->
+      <!-- 注意：label决定当前选中的值1 -->
       <el-checkbox v-for="item in list" :key="item.id" :label="item.id">
         {{ item.name }}
       </el-checkbox>
